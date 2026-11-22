@@ -1,0 +1,576 @@
+{
+  "n_pelanggan": 120000,
+  "n_kolom": 60,
+  "audit": {
+    "n_porsi_kategori": 16,
+    "n_porsi_jam": 4,
+    "jumlah_porsi_kategori_min_max": [
+      0.9996,
+      1.0005
+    ],
+    "pct_nol_porsi_kategori": 6.07,
+    "keranjang_nan": 6736,
+    "keranjang_nan_saat_frekuensi_nol": 6736,
+    "frekuensi_nol_tapi_recency_lt_90": 5399,
+    "skew_sebelum": {
+      "belanja_90h": 7.47,
+      "recency_hari": 7.94,
+      "sesi_per_minggu": 9.19,
+      "rata2_keranjang": 3.57,
+      "klik_iklan_30h": 7.45
+    },
+    "skew_sesudah_log": {
+      "belanja_90h": -2.99,
+      "recency_hari": 0.82,
+      "sesi_per_minggu": 1.62,
+      "rata2_keranjang": 0.3,
+      "klik_iklan_30h": 0.52
+    },
+    "perangkat": {
+      "android": 77760,
+      "ios": 31710,
+      "web": 10530
+    }
+  },
+  "noise": {
+    "maks_rho_domain": 0.0206,
+    "seragam_p_gt_005": [
+      "n01",
+      "n08",
+      "n15"
+    ]
+  },
+  "rho_domain_median_maks": 0.192,
+  "redundansi_rho": {
+    "log_belanja_90h~log_rata2_keranjang+log_frekuensi_90h": 1.0,
+    "log_belanja_30h~log_belanja_90h": 0.971,
+    "log_frekuensi_30h~log_frekuensi_90h": 0.868
+  },
+  "seleksi": {
+    "eta_min": 0.01,
+    "n_kandidat": 42,
+    "n_terpilih": 31,
+    "terpilih": [
+      "log_frekuensi_90h",
+      "log_recency_hari",
+      "log_sesi_per_minggu",
+      "logit_persen_voucher",
+      "log_rata2_keranjang",
+      "logit_persen_flash_sale",
+      "umur",
+      "log_lama_member_bulan",
+      "log_ulasan_90h",
+      "log_rasio_konversi",
+      "logit_persen_paylater",
+      "logit_persen_cod",
+      "clr_porsi_jam_malam",
+      "log_item_per_pesanan",
+      "dev_ios",
+      "clr_porsi_jam_pagi",
+      "clr_porsi_fashion",
+      "log_retur_90h",
+      "clr_porsi_makanan_minuman",
+      "log_klik_iklan_30h",
+      "log_durasi_sesi_menit",
+      "clr_porsi_kecantikan",
+      "clr_porsi_ibu_bayi",
+      "clr_porsi_elektronik",
+      "clr_porsi_voucher_digital",
+      "log_wishlist",
+      "clr_porsi_jam_siang",
+      "clr_porsi_rumah_tangga",
+      "clr_porsi_gadget_aksesoris",
+      "clr_porsi_jam_sore",
+      "clr_porsi_perabot"
+    ],
+    "dibuang_eta": [
+      "dev_web",
+      "clr_porsi_pertanian",
+      "clr_porsi_olahraga",
+      "clr_porsi_hobi",
+      "clr_porsi_lainnya",
+      "clr_porsi_buku_alat_tulis",
+      "clr_porsi_otomotif",
+      "clr_porsi_kesehatan",
+      "log_jumlah_alamat",
+      "kota_tier",
+      "rating_beri_rata2"
+    ],
+    "dibuang_redundan": {
+      "log_belanja_90h": "= frekuensi_90h x rata2_keranjang",
+      "log_belanja_30h": "versi 30 hari dari belanja_90h",
+      "log_frekuensi_30h": "versi 30 hari dari frekuensi_90h"
+    },
+    "dibuang_noise": [
+      "n01",
+      "n02",
+      "n03",
+      "n04",
+      "n05",
+      "n06",
+      "n07",
+      "n08",
+      "n09",
+      "n10",
+      "n11",
+      "n12",
+      "n13",
+      "n14",
+      "n15"
+    ]
+  },
+  "anomali": {
+    "ambang_skor": 0.485,
+    "n": 2462,
+    "pct": 2.05,
+    "profil_median_vs_normal": {
+      "belanja_90h": [
+        1838950.0,
+        1127550.0
+      ],
+      "frekuensi_90h": [
+        9.0,
+        7.0
+      ],
+      "sesi_per_minggu": [
+        158.59,
+        5.45
+      ],
+      "recency_hari": [
+        9.1,
+        10.1
+      ],
+      "rasio_konversi": [
+        0.01,
+        0.1
+      ],
+      "lama_member_bulan": [
+        16.55,
+        16.0
+      ],
+      "item_per_pesanan": [
+        3.0,
+        2.0
+      ]
+    },
+    "pct_di_atas_p99_minimal_satu_fitur": 85.2
+  },
+  "pemilihan_k": {
+    "aturan": "K terbesar dengan ARI stabilitas >= 0.95",
+    "K": 7,
+    "tabel": [
+      {
+        "K": 3,
+        "silhouette": 0.0845,
+        "calinski_harabasz": 1642.7,
+        "davies_bouldin": 2.883,
+        "bic_gmm": 1661237.0,
+        "stabilitas_ari": 0.982,
+        "stabilitas_ari_min": 0.974
+      },
+      {
+        "K": 4,
+        "silhouette": 0.0822,
+        "calinski_harabasz": 1388.9,
+        "davies_bouldin": 2.906,
+        "bic_gmm": 1647409.0,
+        "stabilitas_ari": 0.981,
+        "stabilitas_ari_min": 0.973
+      },
+      {
+        "K": 5,
+        "silhouette": 0.0708,
+        "calinski_harabasz": 1201.5,
+        "davies_bouldin": 3.253,
+        "bic_gmm": 1634105.0,
+        "stabilitas_ari": 0.937,
+        "stabilitas_ari_min": 0.884
+      },
+      {
+        "K": 6,
+        "silhouette": 0.0719,
+        "calinski_harabasz": 1068.1,
+        "davies_bouldin": 3.045,
+        "bic_gmm": 1628949.0,
+        "stabilitas_ari": 0.971,
+        "stabilitas_ari_min": 0.963
+      },
+      {
+        "K": 7,
+        "silhouette": 0.0672,
+        "calinski_harabasz": 959.0,
+        "davies_bouldin": 3.206,
+        "bic_gmm": 1622660.0,
+        "stabilitas_ari": 0.961,
+        "stabilitas_ari_min": 0.955
+      },
+      {
+        "K": 8,
+        "silhouette": 0.0652,
+        "calinski_harabasz": 858.9,
+        "davies_bouldin": 3.178,
+        "bic_gmm": 1337271.0,
+        "stabilitas_ari": 0.8,
+        "stabilitas_ari_min": 0.764
+      },
+      {
+        "K": 9,
+        "silhouette": 0.0599,
+        "calinski_harabasz": 777.8,
+        "davies_bouldin": 3.424,
+        "bic_gmm": 1378114.0,
+        "stabilitas_ari": 0.755,
+        "stabilitas_ari_min": 0.67
+      },
+      {
+        "K": 10,
+        "silhouette": 0.0494,
+        "calinski_harabasz": 715.6,
+        "davies_bouldin": 3.833,
+        "bic_gmm": 1368900.0,
+        "stabilitas_ari": 0.699,
+        "stabilitas_ari_min": 0.592
+      }
+    ]
+  },
+  "dampak_seleksi": [
+    {
+      "set_fitur": "Semua kolom (domain + noise n01-n15)",
+      "n_fitur": 60,
+      "silhouette": 0.0409,
+      "stabilitas_ari": 0.845
+    },
+    {
+      "set_fitur": "Domain tanpa noise (belum diseleksi)",
+      "n_fitur": 45,
+      "silhouette": 0.0566,
+      "stabilitas_ari": 0.822
+    },
+    {
+      "set_fitur": "Fitur terpilih (dipakai)",
+      "n_fitur": 31,
+      "silhouette": 0.0672,
+      "stabilitas_ari": 0.961
+    }
+  ],
+  "metode": {
+    "tabel": [
+      {
+        "metode": "K-Means",
+        "silhouette": 0.0675,
+        "davies_bouldin": 3.193,
+        "calinski_harabasz": 477.9,
+        "stabilitas_ari": 0.961,
+        "ukuran_terkecil_pct": 9.2
+      },
+      {
+        "metode": "Gaussian Mixture (diag)",
+        "silhouette": 0.0143,
+        "davies_bouldin": 4.132,
+        "calinski_harabasz": 241.0,
+        "stabilitas_ari": 0.812,
+        "ukuran_terkecil_pct": 1.29
+      },
+      {
+        "metode": "Agglomerative Ward",
+        "silhouette": 0.0709,
+        "davies_bouldin": 3.08,
+        "calinski_harabasz": 472.9,
+        "stabilitas_ari": 0.903,
+        "ukuran_terkecil_pct": 4.94
+      }
+    ],
+    "kesepakatan_ari": {
+      "K-Means vs Gaussian Mixture (diag)": 0.211,
+      "K-Means vs Agglomerative Ward": 0.842,
+      "Gaussian Mixture (diag) vs Agglomerative Ward": 0.239
+    }
+  },
+  "metode_terpilih": "K-Means",
+  "stabilitas_final": {
+    "n_bootstrap": 10,
+    "ukuran_subsample": 30000,
+    "ukuran_holdout": 10000,
+    "ari_mean": 0.967,
+    "ari_std": 0.004,
+    "ari_min": 0.956
+  },
+  "profil": [
+    {
+      "cluster": -1,
+      "n": 2462,
+      "pct": 2.05,
+      "recency_hari": 9.1,
+      "frekuensi_90h": 9.0,
+      "belanja_90h": 1838950.0,
+      "rata2_keranjang": 216800.0,
+      "persen_voucher": 0.422,
+      "persen_flash_sale": 0.317,
+      "persen_paylater": 0.15,
+      "persen_cod": 0.243,
+      "sesi_per_minggu": 158.59,
+      "rasio_konversi": 0.007,
+      "umur": 34.0,
+      "lama_member_bulan": 16.55,
+      "ulasan_90h": 1.0,
+      "porsi_fashion": 0.087,
+      "porsi_makanan_minuman": 0.111,
+      "porsi_elektronik": 0.03,
+      "porsi_kecantikan": 0.051,
+      "porsi_ibu_bayi": 0.03,
+      "porsi_jam_malam": 0.216,
+      "nama": "Anomali (tidak cocok segmen mana pun)",
+      "aksi": "tinjau manual: kemungkinan reseller/bot/akun bermasalah"
+    },
+    {
+      "cluster": 0,
+      "n": 27248,
+      "pct": 22.71,
+      "recency_hari": 9.0,
+      "frekuensi_90h": 8.0,
+      "belanja_90h": 761450.0,
+      "rata2_keranjang": 101000.0,
+      "persen_voucher": 0.858,
+      "persen_flash_sale": 0.714,
+      "persen_paylater": 0.168,
+      "persen_cod": 0.267,
+      "sesi_per_minggu": 6.365,
+      "rasio_konversi": 0.091,
+      "umur": 25.0,
+      "lama_member_bulan": 13.7,
+      "ulasan_90h": 1.0,
+      "porsi_fashion": 0.169,
+      "porsi_makanan_minuman": 0.07,
+      "porsi_elektronik": 0.026,
+      "porsi_kecantikan": 0.098,
+      "porsi_ibu_bayi": 0.02,
+      "porsi_jam_malam": 0.42,
+      "nama": "Pemburu Voucher / Pemburu Flash Sale",
+      "aksi": "kampanye voucher bertarget & gamifikasi kumpul voucher"
+    },
+    {
+      "cluster": 1,
+      "n": 22644,
+      "pct": 18.87,
+      "recency_hari": 53.3,
+      "frekuensi_90h": 2.0,
+      "belanja_90h": 257000.0,
+      "rata2_keranjang": 177000.0,
+      "persen_voucher": 0.427,
+      "persen_flash_sale": 0.309,
+      "persen_paylater": 0.17,
+      "persen_cod": 0.454,
+      "sesi_per_minggu": 2.0,
+      "rasio_konversi": 0.056,
+      "umur": 36.0,
+      "lama_member_bulan": 25.6,
+      "ulasan_90h": 0.0,
+      "porsi_fashion": 0.089,
+      "porsi_makanan_minuman": 0.103,
+      "porsi_elektronik": 0.039,
+      "porsi_kecantikan": 0.056,
+      "porsi_ibu_bayi": 0.032,
+      "porsi_jam_malam": 0.22,
+      "nama": "Lama Tidak Belanja / Jarang Belanja",
+      "aksi": "kampanye win-back: voucher tanpa minimum belanja"
+    },
+    {
+      "cluster": 2,
+      "n": 18772,
+      "pct": 15.64,
+      "recency_hari": 6.5,
+      "frekuensi_90h": 10.0,
+      "belanja_90h": 2019400.0,
+      "rata2_keranjang": 212000.0,
+      "persen_voucher": 0.412,
+      "persen_flash_sale": 0.233,
+      "persen_paylater": 0.127,
+      "persen_cod": 0.213,
+      "sesi_per_minggu": 6.38,
+      "rasio_konversi": 0.12,
+      "umur": 38.0,
+      "lama_member_bulan": 18.6,
+      "ulasan_90h": 1.0,
+      "porsi_fashion": 0.058,
+      "porsi_makanan_minuman": 0.202,
+      "porsi_elektronik": 0.024,
+      "porsi_kecantikan": 0.035,
+      "porsi_ibu_bayi": 0.079,
+      "porsi_jam_malam": 0.151,
+      "nama": "Belanja Pagi / Ibu & Bayi",
+      "aksi": "promo pagi (morning deals)"
+    },
+    {
+      "cluster": 3,
+      "n": 14694,
+      "pct": 12.24,
+      "recency_hari": 7.5,
+      "frekuensi_90h": 7.0,
+      "belanja_90h": 4536450.0,
+      "rata2_keranjang": 629900.0,
+      "persen_voucher": 0.141,
+      "persen_flash_sale": 0.141,
+      "persen_paylater": 0.086,
+      "persen_cod": 0.092,
+      "sesi_per_minggu": 5.05,
+      "rasio_konversi": 0.113,
+      "umur": 40.0,
+      "lama_member_bulan": 19.7,
+      "ulasan_90h": 1.0,
+      "porsi_fashion": 0.069,
+      "porsi_makanan_minuman": 0.084,
+      "porsi_elektronik": 0.105,
+      "porsi_kecantikan": 0.043,
+      "porsi_ibu_bayi": 0.023,
+      "porsi_jam_malam": 0.17,
+      "nama": "Keranjang Besar / Tidak Bergantung Voucher",
+      "aksi": "bundling produk premium & garansi/proteksi tambahan"
+    },
+    {
+      "cluster": 4,
+      "n": 11708,
+      "pct": 9.76,
+      "recency_hari": 9.0,
+      "frekuensi_90h": 8.0,
+      "belanja_90h": 1316400.0,
+      "rata2_keranjang": 176800.0,
+      "persen_voucher": 0.601,
+      "persen_flash_sale": 0.573,
+      "persen_paylater": 0.821,
+      "persen_cod": 0.265,
+      "sesi_per_minggu": 6.37,
+      "rasio_konversi": 0.09,
+      "umur": 26.0,
+      "lama_member_bulan": 10.9,
+      "ulasan_90h": 1.0,
+      "porsi_fashion": 0.189,
+      "porsi_makanan_minuman": 0.078,
+      "porsi_elektronik": 0.027,
+      "porsi_kecantikan": 0.08,
+      "porsi_ibu_bayi": 0.022,
+      "porsi_jam_malam": 0.364,
+      "nama": "Pengguna Paylater / Sering Retur",
+      "aksi": "promo cicilan paylater 0% untuk menaikkan nilai keranjang"
+    },
+    {
+      "cluster": 5,
+      "n": 11660,
+      "pct": 9.72,
+      "recency_hari": 5.9,
+      "frekuensi_90h": 26.0,
+      "belanja_90h": 6680750.0,
+      "rata2_keranjang": 256300.0,
+      "persen_voucher": 0.34,
+      "persen_flash_sale": 0.222,
+      "persen_paylater": 0.11,
+      "persen_cod": 0.19,
+      "sesi_per_minggu": 5.37,
+      "rasio_konversi": 0.375,
+      "umur": 37.0,
+      "lama_member_bulan": 18.8,
+      "ulasan_90h": 4.0,
+      "porsi_fashion": 0.068,
+      "porsi_makanan_minuman": 0.186,
+      "porsi_elektronik": 0.029,
+      "porsi_kecantikan": 0.041,
+      "porsi_ibu_bayi": 0.042,
+      "porsi_jam_malam": 0.162,
+      "nama": "Konversi Tinggi / Rajin Ulas",
+      "aksi": "rekomendasi cross-sell di halaman checkout"
+    },
+    {
+      "cluster": 6,
+      "n": 10812,
+      "pct": 9.01,
+      "recency_hari": 11.8,
+      "frekuensi_90h": 3.0,
+      "belanja_90h": 420900.0,
+      "rata2_keranjang": 155200.0,
+      "persen_voucher": 0.545,
+      "persen_flash_sale": 0.386,
+      "persen_paylater": 0.168,
+      "persen_cod": 0.41,
+      "sesi_per_minggu": 10.96,
+      "rasio_konversi": 0.019,
+      "umur": 30.0,
+      "lama_member_bulan": 3.3,
+      "ulasan_90h": 0.0,
+      "porsi_fashion": 0.091,
+      "porsi_makanan_minuman": 0.101,
+      "porsi_elektronik": 0.039,
+      "porsi_kecantikan": 0.058,
+      "porsi_ibu_bayi": 0.029,
+      "porsi_jam_malam": 0.223,
+      "nama": "Member Baru / Sering Buka Aplikasi",
+      "aksi": "onboarding: voucher pembelian pertama & panduan aplikasi"
+    }
+  ],
+  "pembeda": {
+    "0": {
+      "logit_persen_voucher": 1.09,
+      "logit_persen_flash_sale": 0.98,
+      "clr_porsi_jam_malam": 0.71,
+      "umur": -0.84,
+      "log_rata2_keranjang": -0.8
+    },
+    "1": {
+      "log_recency_hari": 1.41,
+      "logit_persen_cod": 0.67,
+      "log_lama_member_bulan": 0.65,
+      "log_frekuensi_90h": -1.16,
+      "log_sesi_per_minggu": -1.05
+    },
+    "2": {
+      "clr_porsi_jam_pagi": 0.78,
+      "clr_porsi_ibu_bayi": 0.66,
+      "umur": 0.59,
+      "log_recency_hari": -0.52,
+      "logit_persen_flash_sale": -0.48
+    },
+    "3": {
+      "log_rata2_keranjang": 1.44,
+      "dev_ios": 1.1,
+      "umur": 0.79,
+      "logit_persen_voucher": -1.18,
+      "logit_persen_cod": -0.99
+    },
+    "4": {
+      "logit_persen_paylater": 1.81,
+      "log_retur_90h": 1.37,
+      "clr_porsi_fashion": 0.55,
+      "umur": -0.72,
+      "log_lama_member_bulan": -0.41
+    },
+    "5": {
+      "log_rasio_konversi": 1.78,
+      "log_ulasan_90h": 1.52,
+      "log_frekuensi_90h": 1.46,
+      "log_recency_hari": -0.57,
+      "logit_persen_flash_sale": -0.51
+    },
+    "6": {
+      "log_sesi_per_minggu": 0.84,
+      "logit_persen_cod": 0.54,
+      "clr_porsi_jam_sore": 0.14,
+      "log_lama_member_bulan": -1.71,
+      "log_rasio_konversi": -0.79
+    }
+  },
+  "distribusi": {
+    "-1": 2462,
+    "0": 27248,
+    "1": 22644,
+    "2": 18772,
+    "3": 14694,
+    "4": 11708,
+    "5": 11660,
+    "6": 10812
+  },
+  "library": {
+    "sklearn": "1.9.1",
+    "pandas": "3.0.5",
+    "numpy": "2.5.3",
+    "seed": 42
+  },
+  "durasi_detik": 70.9
+}
