@@ -1,0 +1,7 @@
+model,mae_p50,pinball_50,pinball_90,coverage_90,n
+kota_tujuan dibuang,14.181,7.091,,,
+kota_tujuan target encoding (smoothing k=50),13.768,6.884,,,
+kota_tujuan kategori native LightGBM + cat_smooth (dipakai),13.773,6.886,,,
+Kurir K12 dikenal saat latih,13.288,6.644,,,2808.0
+Kurir K12 tak dikenal -> missing (simulasi K13),13.531,6.766,,,2808.0
+Kurir K12: baseline,20.383,10.191,,,2808.0

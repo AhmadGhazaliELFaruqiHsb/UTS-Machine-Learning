@@ -1,0 +1,5 @@
+model,mae_p50,pinball_50,pinball_90,coverage_90
+LightGBM mentah (Agustus),13.662,6.831,4.435,86.96
+LightGBM + CQR offset Juli (+5.40 jam) (Agustus),13.662,6.831,4.38,90.8
+Baseline (Agustus),20.37,10.185,6.32,89.78
+Ridge log (Agustus),15.09,7.545,4.705,89.85

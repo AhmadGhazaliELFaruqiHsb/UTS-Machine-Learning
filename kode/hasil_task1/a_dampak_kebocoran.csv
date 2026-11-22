@@ -1,0 +1,5 @@
+model,mae_p50,pinball_50,pinball_90,coverage_90
+"Dengan jumlah_scan, val apa adanya (semu)",10.888,5.444,,
+"Dengan jumlah_scan, scan seperti saat pickup",21.603,10.802,,
+"Tanpa jumlah_scan, label mentah (menit tidak dikoreksi)",13.765,6.882,,
+"Tanpa jumlah_scan, label terkoreksi (dipakai)",13.773,6.886,,
