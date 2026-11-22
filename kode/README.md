@@ -2,68 +2,56 @@
 
 **Kelompok 16:**
 - **Fransisco Sitepu** (NIM: 101032300004) - Task 1 & Task 3
-- **Ahmad Ghazali El-Faruqi HSB** (NIM: 101032330080) - Task 2
+- **Ahmad Ghazali El-Faruqi HSB** (NIM: 101032330080) - Task 2, perbaikan Task 1 & Task 3, generator laporan
 
 ---
 
-## 1. Persyaratan Lingkungan (Environment Requirements)
+## 1. Persyaratan Lingkungan
 
-- **Python**: 3.10+ atau 3.11+
-- **Library Utama**:
+- **Python** 3.10+
+- **Library** (versi yang dipakai untuk semua angka di laporan: LightGBM 4.7.0, scikit-learn 1.9.1, pandas 3.0.5, numpy 2.5.3):
   ```bash
-  pip install pandas numpy scikit-learn lightgbm scipy fpdf2 pypdf matplotlib
+  pip install pandas numpy scipy scikit-learn lightgbm matplotlib fpdf2
   ```
+- **Data**: folder `data_uts_ml` (berisi `regresi_*.csv.gz`, `klasifikasi_*.csv.gz`, `clustering.csv.gz`, `kamus_data.md`). Folder dicari otomatis di `../TUGAS MACHINE LEARNING/data_uts_ml-.../data_uts_ml`, `data/`, `data_uts_ml/`, atau `../data_uts_ml`; bisa juga diberikan sebagai argumen.
 
 ---
 
-## 2. Satu Perintah Reproduksi (One-Command Reproducibility)
+## 2. Satu Perintah Reproduksi
 
 Sesuai instruksi ujian: *"One command must reproduce every number in the report."*
 
-Jalankan perintah berikut dari folder root repositori:
-
 ```bash
-python kode/run_all.py
+python kode/run_all.py                 # atau: python kode/run_all.py /path/ke/data_uts_ml
 ```
 
-Perintah di atas secara otomatis akan:
-1. Memuat seluruh dataset dari direktori data lokal.
-2. Menjalankan **Task 1** (Audit kebocoran `jumlah_scan`, validasi berbasis waktu Jan–Jun vs Jul–Agu, pelatihan model kuantil LightGBM P50 dan P90, kalibrasi *Conformal Prediction*, dan menghasilkan `prediksi_regresi.csv`).
-3. Menjalankan **Task 2** (audit label lag & kebocoran `flag_review_manual`, validasi berbasis waktu, fitur perilaku pengguna/merchant tanpa informasi masa depan, perbandingan penanganan imbalance, analisis pergeseran pola, kalibrasi out-of-time, aturan keputusan berbasis biaya, analisis galat; menghasilkan `prediksi_klasifikasi.csv`, seluruh tabel/grafik di `kode/hasil_task2/`, lalu memperbarui bagian Task 2 di `laporan.pdf` lewat `kode/laporan_task2.py`).
-4. Menjalankan **Task 3** (Transformasi data komposisional *Centered Log-Ratio* (CLR), deteksi anomali *Isolation Forest*, *K-Means* $K=5$, uji stabilitas *Adjusted Rand Index*, dan menghasilkan `cluster.csv`).
+Perintah ini menjalankan berurutan:
+1. **Task 1** (`task1_regression.py`, ±13–21 menit pada 2 CPU): audit data (kebocoran `jumlah_scan`, label bersatuan menit, sentinel `jarak_km`, `berat_kg` hilang tidak acak, `f30` proksi waktu), validasi waktu Jan–Jun → Jul–Agu vs random 5-fold CV, tuning di dalam lipatan latih, baseline + Ridge log-target + LightGBM quantile, uji kategori baru, kalibrasi conformal (kalibrasi Juli, evaluasi Agustus), galat per layanan/pulau/kurir, SHAP & partial dependence → `prediksi_regresi.csv`, `kode/hasil_task1/`.
+2. **Task 2** (`task2_classification.py`, ±7 menit): audit label lag & kebocoran `flag_review_manual`, validasi waktu, fitur perilaku tanpa informasi masa depan, imbalance, pergeseran pola, kalibrasi out-of-time, aturan biaya, analisis galat → `prediksi_klasifikasi.csv`, `kode/hasil_task2/`.
+3. **Task 3** (`task3_clustering.py`, ±2–4 menit): CLR/logit/log1p, bukti noise `n01–n15`, seleksi fitur dengan η², anomali Isolation Forest (ambang knee), pemilihan K (silhouette, CH, DB, BIC, stabilitas bootstrap), perbandingan K-Means/GMM/Agglomerative, profil & aksi → `cluster.csv`, `kode/hasil_task3/`.
+4. **Laporan** (`laporan.py` + `laporan_task2.py`): membangun ulang seluruh `laporan.pdf` dari `kode/hasil_task1-3/`. Tidak ada angka yang diketik manual.
 
 ---
 
-## 3. Menjalankan Script Secara Terpisah (Per-Task Execution)
+## 3. Menjalankan per Task
 
-Jika ingin menjalankan tugas tertentu secara independen:
-
-### Task 1: Regresi Estimasi Waktu Pengiriman
 ```bash
-python kode/task1_regression.py
+python kode/task1_regression.py   [folder_data]
+python kode/task2_classification.py [folder_data]
+python kode/task3_clustering.py   [folder_data]
+python kode/laporan.py            # bangun laporan.pdf dari hasil yang sudah ada
 ```
-- Output: `prediksi_regresi.csv` (kolom: `id_paket`, `p50`, `p90`)
 
-### Task 2: Klasifikasi Deteksi Fraud
-```bash
-python kode/task2_classification.py            # opsional: path folder data sebagai argumen
-python kode/laporan_task2.py                   # perbarui halaman Task 2 di laporan.pdf dari hasil di atas
-```
-- Output: `prediksi_klasifikasi.csv` (kolom: `id_transaksi`, `prob`, `tandai`)
-- Semua angka laporan Task 2: `kode/hasil_task2/ringkasan_task2.json` dan tabel `kode/hasil_task2/*.csv`
-- Grafik: `kode/hasil_task2/fig_task2_*.png`
-- Waktu eksekusi ± 7 menit (2 CPU), seed 42, deterministik.
-
-### Task 3: Klasterisasi Segmentasi Pelanggan
-```bash
-python kode/task3_clustering.py
-```
-- Output: `cluster.csv` (kolom: `id_pelanggan`, `cluster`)
+| Task | Output prediksi | Semua angka laporan |
+| --- | --- | --- |
+| 1 | `prediksi_regresi.csv` (`id_paket`, `p50`, `p90`) | `kode/hasil_task1/ringkasan_task1.json` + `*.csv`, grafik `fig_task1_*.png` |
+| 2 | `prediksi_klasifikasi.csv` (`id_transaksi`, `prob`, `tandai`) | `kode/hasil_task2/ringkasan_task2.json` + `*.csv`, grafik `fig_task2_*.png` |
+| 3 | `cluster.csv` (`id_pelanggan`, `cluster`) | `kode/hasil_task3/ringkasan_task3.json` + `*.csv`, grafik `fig_task3_*.png` |
 
 ---
 
-## 4. Random Seeds & Konsistensi Numerik
+## 4. Seed & Determinisme
 
-Semua eksperimen dan model menggunakan seed tetap untuk menjamin determinisme:
-- `random_state = 42` (Model training, split, subsampling)
-- Validasi berbasis waktu memastikan tidak ada *look-ahead bias* dan tidak terjadi *data leakage*.
+- `random_state = 42` (atau turunan tetapnya) di semua model, split, subsampling, dan bootstrap.
+- Hasil deterministik: menjalankan ulang menghasilkan file prediksi dan angka yang sama (diverifikasi dengan md5).
+- Validasi berbasis waktu menjamin tidak ada *look-ahead bias*.

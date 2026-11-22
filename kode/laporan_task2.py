@@ -1,31 +1,25 @@
 """
 =============================================================================
-UTS MACHINE LEARNING - GENERATOR BAGIAN TASK 2 PADA laporan.pdf
+UTS MACHINE LEARNING - BAGIAN TASK 2 LAPORAN + UTILITAS PDF
 Author : Ahmad Ghazali El-Faruqi HSB (101032330080)
 =============================================================================
-Membaca angka dari kode/hasil_task2/ (hasil task2_classification.py) lalu
-mengganti halaman "TASK 2" di laporan.pdf dengan bagian Task 2 yang lengkap.
-Semua angka pada bagian Task 2 laporan berasal dari file hasil tersebut,
-sehingga dapat direproduksi dengan satu perintah (python kode/run_all.py).
-
-Halaman lain (Task 1 & Task 3) tidak diubah isinya; hanya nomor halaman
-pada header yang disesuaikan.
+Berisi kelas Doc (gaya laporan) dan add_task2(d) yang menulis bagian Task 2
+dari angka di kode/hasil_task2/. Dipanggil oleh kode/laporan.py yang membangun
+seluruh laporan.pdf. Menjalankan file ini = menjalankan kode/laporan.py.
 """
 
-import io
 import json
 import os
 
 import pandas as pd
 from fpdf import FPDF
-from pypdf import PdfReader, PdfWriter
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, ".."))
 RES = os.path.join(HERE, "hasil_task2")
 HEADER = "UTS Machine Learning - Kelompok 16: Fransisco Sitepu & Ahmad Ghazali El-Faruqi HSB"
 FOOTER = "Program Studi S1 Teknik Komputer - Telkom University 2026"
-MARKER = "Bagian Task 2 dihasilkan dari kode/laporan_task2.py"
+MARKER = "Dihasilkan otomatis dari hasil kode oleh kode/laporan.py"
 NAVY = (31, 56, 100)
 BLUE = (46, 116, 181)
 
@@ -49,7 +43,11 @@ def num(x, d=4):
 class Doc(FPDF):
     start_page = 3
 
+    cover = False
+
     def header(self):
+        if self.cover and self.page_no() == 1:
+            return
         self.set_font("Helvetica", "I", 8)
         self.set_text_color(90, 90, 90)
         self.cell(0, 5, HEADER, align="L")
@@ -62,6 +60,8 @@ class Doc(FPDF):
         self.set_text_color(0, 0, 0)
 
     def footer(self):
+        if self.cover and self.page_no() == 1:
+            return
         self.set_y(-12)
         self.set_font("Helvetica", "I", 7)
         self.set_text_color(120, 120, 120)
@@ -114,7 +114,22 @@ class Doc(FPDF):
         self.ln(1.5)
 
 
+def new_doc(start_page=1):
+    d = Doc(format="A4")
+    d.start_page = start_page
+    d.set_margins(10, 10, 10)
+    d.set_auto_page_break(True, margin=15)
+    return d
+
+
 def build_task2_pdf(start_page):
+    d = new_doc(start_page)
+    add_task2(d)
+    return bytes(d.output())
+
+
+def add_task2(d):
+    """Menulis bagian Task 2 ke dokumen d (dipakai juga oleh kode/laporan.py)."""
     R = json.load(open(os.path.join(RES, "ringkasan_task2.json")))
     leak = pd.read_csv(os.path.join(RES, "a_dampak_kebocoran.csv"))
     mg = pd.read_csv(os.path.join(RES, "a_fraud_per_minggu.csv"))
@@ -131,10 +146,6 @@ def build_task2_pdf(start_page):
     fr = R["flag_review"]; fold = R["fold"]; fin = R["final"]
     qris = R["pola_qris_agustus"]
 
-    d = Doc(format="A4")
-    d.start_page = start_page
-    d.set_margins(10, 10, 10)
-    d.set_auto_page_break(True, margin=15)
     d.add_page()
     d.h1("TASK 2 - KLASIFIKASI: DETEKSI TRANSAKSI FRAUD")
     d.p(f"Dikerjakan oleh Ahmad Ghazali El-Faruqi HSB (NIM 101032330080). Data latih {th(R['n_train'])} transaksi "
@@ -287,49 +298,8 @@ def build_task2_pdf(start_page):
     d.multi_cell(0, 4, "Gambar: (a) fraud rate mingguan & label lag, (e) fraud rate per kanal per bulan, (f) reliability diagram Fold B; "
                        "(d) kurva precision-recall metode imbalance di Fold B dan importance model final.",
                  new_x="LMARGIN", new_y="NEXT")
-    return bytes(d.output())
-
-
-def header_overlay(page_no, width, height):
-    """Overlay putih + header baru untuk menyesuaikan nomor halaman."""
-    o = FPDF(unit="pt", format=(width, height))
-    o.add_page()
-    # Posisi asli "Hal. N" pada laporan: x=543.2 pt, baseline y=799.8 pt dari bawah
-    base_y = height - 799.80
-    o.set_fill_color(255, 255, 255)
-    o.rect(525, base_y - 9, 55, 12, style="F")
-    o.set_font("Helvetica", "I", 8)
-    o.set_text_color(100, 100, 100)
-    txt = f"Hal. {page_no}"
-    o.text(543.20, base_y, txt)
-    return PdfReader(io.BytesIO(bytes(o.output()))).pages[0]
-
-
-def run(pdf_path=None):
-    pdf_path = pdf_path or os.path.join(ROOT, "laporan.pdf")
-    reader = PdfReader(pdf_path)
-    texts = [(pg.extract_text() or "") for pg in reader.pages]
-    t2 = [i for i, t in enumerate(texts) if "TASK 2 - KLASIFIKASI" in t or MARKER in t]
-    if not t2:
-        raise RuntimeError("Halaman TASK 2 tidak ditemukan di laporan.pdf")
-    first, last = min(t2), max(t2)
-    new_pages = PdfReader(io.BytesIO(build_task2_pdf(first + 1))).pages
-    w = PdfWriter()
-    for i in range(first):
-        w.add_page(reader.pages[i])
-    for pg in new_pages:
-        w.add_page(pg)
-    shift = len(new_pages) - (last - first + 1)
-    for i in range(last + 1, len(reader.pages)):
-        pg = reader.pages[i]
-        if shift != 0:
-            box = pg.mediabox
-            pg.merge_page(header_overlay(i + 1 + shift, float(box.width), float(box.height)))
-        w.add_page(pg)
-    with open(pdf_path, "wb") as f:
-        w.write(f)
-    print(f"[Laporan] Bagian Task 2 diperbarui: halaman {first + 1}-{first + len(new_pages)}; total {len(w.pages)} halaman")
 
 
 if __name__ == "__main__":
-    run()
+    from laporan import build
+    build()
