@@ -9,31 +9,24 @@
 | No | Nama Lengkap | NIM | Kelas | Peran Utama | Akun GitHub |
 |---|---|---|---|---|---|
 | 1 | **Fransisco Sitepu** | **101032300004** | **TK 47 03** | **Task 1 (Regression) & Task 3 (Clustering)** | [@Frans1828](https://github.com/Frans1828) |
-| 2 | **Ahmad Ghazali El-Faruqi HSB** | **101032330080** | **TK 47 03** | **Task 2 (Classification)** | [@AhmadGhazaliELFaruqiHsb](https://github.com/AhmadGhazaliELFaruqiHsb) |
+| 2 | **Ahmad Ghazali El-Faruqi HSB** | **101032330080** | **TK 47 03** | **Task 2 (Classification); perbaikan Task 1 & 3; generator laporan** | [@AhmadGhazaliELFaruqiHsb](https://github.com/AhmadGhazaliELFaruqiHsb) |
 
 ---
 
 ## 2. Rincian Kontribusi Anggota (Work Breakdown)
 
 ### A. Fransisco Sitepu (NIM: 101032300004)
-- **Task 1 – Regression (Delivery Time Estimation)**:
-  - Melakukan audit data mendalam: mengidentifikasi *data leakage* kritis pada fitur `jumlah_scan` (distribusi di data latih rata-rata 9.65 vs data uji 1.50) dan membuktikan dampaknya secara kuantitatif (error meledak dari MAE 18.74 ke 30.48 jika memakai fitur bocor).
-  - Merancang skema validasi berbasis waktu (*time-based split*: Jan–Jun 2025 sebagai train, Jul–Agu 2025 sebagai validation) untuk meniru kondisi prediksi masa depan.
-  - Membangun model kuantil *LightGBM* untuk memprediksi median ($P50$) dan batas atas ($P90$).
-  - Menerapkan kalibrasi *Conformal Prediction* sehingga cakupan empiris $P90$ mencapai target persis $\ge 90.00\%$.
-  - Mengatasi kategori kardinalitas tinggi dan kemunculan kategori baru (`mitra_kurir = 'K13'`) di data uji.
-  - Menghasilkan file prediksi resmi `prediksi_regresi.csv` (60.000 baris, $P90 \ge P50$).
-- **Task 3 – Clustering (Customer Segmentation)**:
-  - Melakukan prapemrosesan data komposisional menggunakan transformasi *Centered Log-Ratio* (CLR) untuk 16 kategori belanja dan 4 interval jam belanja.
-  - Menangani *skewness* moneter (`belanja_90h`, `recency_hari`, dll.) dengan transformasi logaritmik dan mengimputasi nilai hilang pada `rata2_keranjang` pelanggan inaktif.
-  - Menemukan bahwa kolom `n01`–`n15` merupakan *synthetic noise* dan melakukan seleksi fitur domain RFM + perilaku.
-  - Menerapkan *Isolation Forest* untuk menandai 1.800 pelanggan anomali (1.50%) sebagai label `-1`.
-  - Membandingkan algoritma *K-Means*, *Gaussian Mixture Model* (GMM), dan *Agglomerative Clustering* serta mengevaluasi $K$ optimal ($K=5$) via skor *Silhouette*, *Davies-Bouldin*, dan *Calinski-Harabasz*.
-  - Melakukan uji stabilitas klaster menggunakan *bootstrap subsampling* dengan hasil rata-rata *Adjusted Rand Index* (ARI) tinggi.
-  - Menyusun profil persona bisnis untuk 5 segmen utama serta rekomendasi aksi pemasaran.
-  - Menghasilkan file resmi `cluster.csv` (120.000 pelanggan).
-- **Infrastruktur Repositori & Dokumentasi**:
-  - Inisialisasi struktur repositori, otomatisasi satu perintah (`run_all.py`), dan penyusunan laporan teknis.
+- **Inisialisasi repositori kelompok** dan versi awal seluruh pipeline (commit `b3d0267`): struktur repo, `run_all.py`, laporan versi awal.
+- **Task 1 – Regression (versi awal)**:
+  - Mengidentifikasi kebocoran `jumlah_scan` (rata-rata 9,65 di data latih vs 1,50 saat pickup) dan membuangnya dari model.
+  - Merancang validasi berbasis waktu (latih Jan–Jun 2025, validasi Jul–Agu 2025).
+  - Membangun baseline Ridge (target log) dan LightGBM quantile P50/P90 dengan offset conformal.
+  - Menangani kategori baru `mitra_kurir = 'K13'` lewat kategori native LightGBM.
+- **Task 3 – Clustering (versi awal)**:
+  - Transformasi CLR untuk 16 porsi kategori dan 4 porsi jam, log1p untuk variabel miring, one-hot perangkat.
+  - Menemukan bahwa `n01`–`n15` adalah noise dan mengeluarkannya.
+  - Isolation Forest untuk label anomali `-1` dan K-Means sebagai metode utama, beserta profil persona segmen.
+- Meminta perbaikan Task 1 & Task 3 agar seluruh angka laporan dihasilkan oleh kode (dikerjakan pada PR Ahmad, lihat bagian B).
 
 ### B. Ahmad Ghazali El-Faruqi HSB (NIM: 101032330080)
 - **Task 2 – Classification (Fraud Detection)**:
@@ -46,6 +39,13 @@
   - Kalibrasi probabilitas out-of-time (Platt vs isotonic) dan aturan keputusan berbasis biaya, dibandingkan dengan "tandai semua" dan "tidak tandai".
   - Analisis galat per kanal, kategori merchant, dan pola fraud.
   - Menghasilkan `prediksi_klasifikasi.csv`, `kode/hasil_task2/`, dan halaman Task 2 di `laporan.pdf` (via `kode/laporan_task2.py`).
+- **Perbaikan Task 1 – Regression** (atas permintaan Fransisco):
+  - Menulis ulang `kode/task1_regression.py` agar semua poin a–f dihitung oleh kode: dampak kebocoran `jumlah_scan`, koreksi label bersatuan menit (370 baris > 1.000 jam), sentinel `jarak_km`, `berat_kg` hilang tidak acak, `f30` proksi waktu.
+  - Random 5-fold CV vs split waktu, tuning LightGBM di dalam lipatan latih, baseline + 2 model lanjutan (Ridge log-target, LightGBM quantile).
+  - Simulasi kategori baru (kurir dikeluarkan dari data latih), kalibrasi conformal dengan data kalibrasi (Juli) terpisah dari evaluasi (Agustus), galat per layanan/pulau/kurir, SHAP & partial dependence.
+- **Perbaikan Task 3 – Clustering** (atas permintaan Fransisco):
+  - Menulis ulang `kode/task3_clustering.py`: bukti noise `n01–n15`, seleksi fitur dengan η² & redundansi, anomali dengan ambang knee, pemilihan K dengan silhouette/CH/DB/BIC/stabilitas bootstrap (K = 7), perbandingan 3 metode, stabilitas final, profil & aksi otomatis.
+- **Laporan & reproduksibilitas**: `kode/laporan.py` membangun seluruh `laporan.pdf` dari `kode/hasil_task1-3/`; `run_all.py` diperbarui.
 - **Pull request**: [daftar PR Ahmad ke repo kelompok](https://github.com/Frans1828/UTS-Machine-Learning/pulls?q=is%3Apr+author%3AAhmadGhazaliELFaruqiHsb)
 
 ---
@@ -61,8 +61,9 @@ Sesuai dengan ketentuan ujian: *"AI tools: allowed. State the tool, the parts it
    - Membantu *brainstorming* rekayasa fitur komposisional (metodologi *Centered Log-Ratio* / CLR dari Aitchison).
    - Membantu penulisan kerangka kode otomatisasi dan perapian struktur laporan akademis.
    - Task 2: Claude (Anthropic) membantu menyusun kode pipeline `kode/task2_classification.py`, generator laporan `kode/laporan_task2.py`, dan draf teks bagian Task 2.
+   - Perbaikan Task 1 & Task 3: Claude (Anthropic) membantu menulis ulang `kode/task1_regression.py`, `kode/task3_clustering.py`, `kode/laporan.py`, dan draf teks laporan Task 1 & 3.
 3. **Metode Verifikasi oleh Anggota**:
-   - Task 2: setiap angka di laporan dibaca langsung dari `kode/hasil_task2/ringkasan_task2.json` dan tabel CSV yang dihasilkan kode; format `prediksi_klasifikasi.csv` dicek otomatis (106.674 baris unik, `prob` di [0,1], `tandai` 0/1).
+   - Task 1–3: setiap angka di laporan dibaca langsung dari `kode/hasil_task1-3/` (JSON & CSV hasil kode) oleh `kode/laporan.py`; format ketiga file prediksi dicek otomatis di kode (jumlah baris, ID unik, `p90 >= p50`, `prob` di [0,1], `tandai` 0/1); `run_all.py` dijalankan ulang dari awal dan md5 file prediksi identik.
    - Semua angka, metrik validasi (MAE, Pinball loss, cakupan kuantil, skor Silhouette, ARI), dan tabel yang dilaporkan dieksekusi secara independen dan diverifikasi langsung pada dataset lokal.
    - Tidak ada angka atau prediksi yang dihasilkan secara fiktif; seluruh file `prediksi_regresi.csv`, `prediksi_klasifikasi.csv`, dan `cluster.csv` diproduksi secara deterministik melalui kode Python yang dapat direproduksi penuh dengan satu perintah (`python kode/run_all.py`).
 
