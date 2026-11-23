@@ -1,0 +1,4 @@
+metode,silhouette,davies_bouldin,calinski_harabasz,stabilitas_ari,ukuran_terkecil_pct
+K-Means,0.0675,3.193,477.9,0.961,9.2
+Gaussian Mixture (diag),0.0143,4.132,241.0,0.812,1.29
+Agglomerative Ward,0.0709,3.08,472.9,0.903,4.94

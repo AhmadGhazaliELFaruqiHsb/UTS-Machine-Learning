@@ -1,0 +1,645 @@
+{
+  "n_train": 250000,
+  "n_test": 60000,
+  "audit": {
+    "n_label_menit": 370,
+    "pct_label_menit": 0.148,
+    "max_label_raw": 25452.0,
+    "max_label_dibagi_60": 424.2,
+    "p99_label": 224.7,
+    "scan_mean_train": 9.65,
+    "scan_mean_test": 1.5,
+    "scan_max_train": 97,
+    "scan_max_test": 7,
+    "scan_spearman_target": 0.769,
+    "jarak_9999_train": 456,
+    "jarak_9999_test": 130,
+    "jarak_0_train": 703,
+    "jarak_0_test": 177,
+    "berat_missing_train": 13897,
+    "berat_missing_test": 3265,
+    "berat_missing_pct": 5.56,
+    "share_kargo_saat_berat_hilang": 59.0,
+    "share_kargo_total": 10.0,
+    "umur_akun_mustahil": 5,
+    "f30_mean_per_bulan": {
+      "1": 0.055,
+      "2": 0.189,
+      "3": 0.292,
+      "4": 0.424,
+      "5": 0.539,
+      "6": 0.659,
+      "7": 0.78,
+      "8": 0.907,
+      "9": 1.034,
+      "10": 1.148
+    },
+    "f30_spearman_target": -0.004,
+    "kategori_baru_test": {
+      "layanan": [],
+      "mitra_kurir": [
+        "K13"
+      ],
+      "hub_asal": [],
+      "kota_asal": [],
+      "pulau_tujuan": [],
+      "kota_tujuan": []
+    },
+    "n_baris_k13_test": 2342,
+    "n_kota_tujuan": 405
+  },
+  "n_fitur": 76,
+  "lipatan": {
+    "latih_jan_jun": 181396,
+    "uji_jul_agu": 68604,
+    "tuning_latih_jan_apr": 116614,
+    "tuning_val_mei_jun": 64782,
+    "kalibrasi_jul": 34436,
+    "evaluasi_agu": 34168
+  },
+  "tuning_terbaik": {
+    "0.5": {
+      "num_leaves": 127,
+      "min_child_samples": 300,
+      "n_estimators": 271
+    },
+    "0.9": {
+      "num_leaves": 127,
+      "min_child_samples": 300,
+      "n_estimators": 400
+    }
+  },
+  "kebocoran": [
+    {
+      "model": "Dengan jumlah_scan, val apa adanya (semu)",
+      "mae_p50": 10.888,
+      "pinball_50": 5.444,
+      "pinball_90": null,
+      "coverage_90": null
+    },
+    {
+      "model": "Dengan jumlah_scan, scan seperti saat pickup",
+      "mae_p50": 21.603,
+      "pinball_50": 10.802,
+      "pinball_90": null,
+      "coverage_90": null
+    },
+    {
+      "model": "Tanpa jumlah_scan, label mentah (menit tidak dikoreksi)",
+      "mae_p50": 13.765,
+      "pinball_50": 6.882,
+      "pinball_90": null,
+      "coverage_90": null
+    },
+    {
+      "model": "Tanpa jumlah_scan, label terkoreksi (dipakai)",
+      "mae_p50": 13.773,
+      "pinball_50": 6.886,
+      "pinball_90": null,
+      "coverage_90": null
+    }
+  ],
+  "validasi": {
+    "random_cv_mae": 13.273,
+    "random_cv_mae_std": 0.075,
+    "random_cv_pinball": 6.637,
+    "waktu_mae": 13.773,
+    "waktu_pinball": 6.886,
+    "rolling": [
+      {
+        "latih": "Jan-4",
+        "uji": "5-6",
+        "mae": 13.243,
+        "pinball_50": 6.621
+      },
+      {
+        "latih": "Jan-6",
+        "uji": "7-8",
+        "mae": 13.773,
+        "pinball_50": 6.886
+      }
+    ]
+  },
+  "model": [
+    {
+      "model": "Baseline: kuantil empiris per layanan x pulau",
+      "mae_p50": 20.974,
+      "pinball_50": 10.487,
+      "pinball_90": 6.458,
+      "coverage_90": 88.91
+    },
+    {
+      "model": "Lanjutan 1: Ridge target log + kuantil residual",
+      "mae_p50": 15.372,
+      "pinball_50": 7.686,
+      "pinball_90": 4.728,
+      "coverage_90": 89.72
+    },
+    {
+      "model": "Lanjutan 2: LightGBM quantile (tuned)",
+      "mae_p50": 13.773,
+      "pinball_50": 6.886,
+      "pinball_90": 4.471,
+      "coverage_90": 86.42
+    }
+  ],
+  "kategori": [
+    {
+      "model": "kota_tujuan dibuang",
+      "mae_p50": 14.181,
+      "pinball_50": 7.091,
+      "pinball_90": null,
+      "coverage_90": null
+    },
+    {
+      "model": "kota_tujuan target encoding (smoothing k=50)",
+      "mae_p50": 13.768,
+      "pinball_50": 6.884,
+      "pinball_90": null,
+      "coverage_90": null
+    },
+    {
+      "model": "kota_tujuan kategori native LightGBM + cat_smooth (dipakai)",
+      "mae_p50": 13.773,
+      "pinball_50": 6.886,
+      "pinball_90": null,
+      "coverage_90": null
+    },
+    {
+      "model": "Kurir K12 dikenal saat latih",
+      "mae_p50": 13.288,
+      "pinball_50": 6.644,
+      "pinball_90": null,
+      "coverage_90": null,
+      "n": 2808
+    },
+    {
+      "model": "Kurir K12 tak dikenal -> missing (simulasi K13)",
+      "mae_p50": 13.531,
+      "pinball_50": 6.766,
+      "pinball_90": null,
+      "coverage_90": null,
+      "n": 2808
+    },
+    {
+      "model": "Kurir K12: baseline",
+      "mae_p50": 20.383,
+      "pinball_50": 10.191,
+      "pinball_90": null,
+      "coverage_90": null,
+      "n": 2808
+    }
+  ],
+  "conformal": {
+    "offset_kalibrasi_jul": 5.396,
+    "offset_final": 4.829,
+    "coverage_raw_jul_agu": 86.42,
+    "tabel": [
+      {
+        "model": "LightGBM mentah (Agustus)",
+        "mae_p50": 13.662,
+        "pinball_50": 6.831,
+        "pinball_90": 4.435,
+        "coverage_90": 86.96
+      },
+      {
+        "model": "LightGBM + CQR offset Juli (+5.40 jam) (Agustus)",
+        "mae_p50": 13.662,
+        "pinball_50": 6.831,
+        "pinball_90": 4.38,
+        "coverage_90": 90.8
+      },
+      {
+        "model": "Baseline (Agustus)",
+        "mae_p50": 20.37,
+        "pinball_50": 10.185,
+        "pinball_90": 6.32,
+        "coverage_90": 89.78
+      },
+      {
+        "model": "Ridge log (Agustus)",
+        "mae_p50": 15.09,
+        "pinball_50": 7.545,
+        "pinball_90": 4.705,
+        "coverage_90": 89.85
+      }
+    ]
+  },
+  "galat_layanan": [
+    {
+      "layanan": "hemat",
+      "n": 22760.0,
+      "median_aktual": 74.5,
+      "mae_p50": 17.56,
+      "pinball_50": 8.78,
+      "pinball_90": 5.15,
+      "coverage_90": 89.4,
+      "mae_relatif_pct": 23.6
+    },
+    {
+      "layanan": "kargo",
+      "n": 6867.0,
+      "median_aktual": 79.2,
+      "mae_p50": 15.95,
+      "pinball_50": 7.98,
+      "pinball_90": 4.99,
+      "coverage_90": 89.8,
+      "mae_relatif_pct": 20.1
+    },
+    {
+      "layanan": "reguler",
+      "n": 28871.0,
+      "median_aktual": 58.6,
+      "mae_p50": 12.0,
+      "pinball_50": 6.0,
+      "pinball_90": 4.01,
+      "coverage_90": 90.9,
+      "mae_relatif_pct": 20.5
+    },
+    {
+      "layanan": "ekspres",
+      "n": 10106.0,
+      "median_aktual": 39.7,
+      "mae_p50": 8.81,
+      "pinball_50": 4.41,
+      "pinball_90": 3.38,
+      "coverage_90": 91.6,
+      "mae_relatif_pct": 22.2
+    }
+  ],
+  "galat_pulau_tujuan": [
+    {
+      "pulau_tujuan": "Papua",
+      "n": 1226.0,
+      "median_aktual": 164.2,
+      "mae_p50": 43.13,
+      "pinball_50": 21.57,
+      "pinball_90": 11.83,
+      "coverage_90": 88.0,
+      "mae_relatif_pct": 26.3
+    },
+    {
+      "pulau_tujuan": "Maluku",
+      "n": 1341.0,
+      "median_aktual": 116.9,
+      "mae_p50": 28.08,
+      "pinball_50": 14.04,
+      "pinball_90": 7.6,
+      "coverage_90": 89.0,
+      "mae_relatif_pct": 24.0
+    },
+    {
+      "pulau_tujuan": "Kalimantan",
+      "n": 3868.0,
+      "median_aktual": 92.5,
+      "mae_p50": 22.38,
+      "pinball_50": 11.19,
+      "pinball_90": 6.42,
+      "coverage_90": 87.5,
+      "mae_relatif_pct": 24.2
+    },
+    {
+      "pulau_tujuan": "Sulawesi",
+      "n": 4532.0,
+      "median_aktual": 89.4,
+      "mae_p50": 21.22,
+      "pinball_50": 10.61,
+      "pinball_90": 5.94,
+      "coverage_90": 88.7,
+      "mae_relatif_pct": 23.7
+    },
+    {
+      "pulau_tujuan": "Bali-Nusa Tenggara",
+      "n": 2659.0,
+      "median_aktual": 66.5,
+      "mae_p50": 16.21,
+      "pinball_50": 8.11,
+      "pinball_90": 4.78,
+      "coverage_90": 90.2,
+      "mae_relatif_pct": 24.4
+    },
+    {
+      "pulau_tujuan": "Sumatera",
+      "n": 9178.0,
+      "median_aktual": 64.2,
+      "mae_p50": 14.89,
+      "pinball_50": 7.45,
+      "pinball_90": 4.68,
+      "coverage_90": 90.1,
+      "mae_relatif_pct": 23.2
+    },
+    {
+      "pulau_tujuan": "Jawa",
+      "n": 45800.0,
+      "median_aktual": 56.7,
+      "mae_p50": 10.74,
+      "pinball_50": 5.37,
+      "pinball_90": 3.69,
+      "coverage_90": 91.0,
+      "mae_relatif_pct": 18.9
+    }
+  ],
+  "galat_mitra_kurir": [
+    {
+      "mitra_kurir": "K07",
+      "n": 5448.0,
+      "median_aktual": 77.9,
+      "mae_p50": 24.34,
+      "pinball_50": 12.17,
+      "pinball_90": 7.01,
+      "coverage_90": 68.1,
+      "mae_relatif_pct": 31.2
+    },
+    {
+      "mitra_kurir": "K02",
+      "n": 8309.0,
+      "median_aktual": 66.2,
+      "mae_p50": 13.69,
+      "pinball_50": 6.84,
+      "pinball_90": 4.31,
+      "coverage_90": 92.1,
+      "mae_relatif_pct": 20.7
+    },
+    {
+      "mitra_kurir": "K03",
+      "n": 7621.0,
+      "median_aktual": 64.8,
+      "mae_p50": 13.62,
+      "pinball_50": 6.81,
+      "pinball_90": 4.32,
+      "coverage_90": 91.8,
+      "mae_relatif_pct": 21.0
+    },
+    {
+      "mitra_kurir": "K10",
+      "n": 4179.0,
+      "median_aktual": 63.0,
+      "mae_p50": 13.43,
+      "pinball_50": 6.71,
+      "pinball_90": 4.34,
+      "coverage_90": 92.1,
+      "mae_relatif_pct": 21.3
+    },
+    {
+      "mitra_kurir": "K06",
+      "n": 5403.0,
+      "median_aktual": 62.8,
+      "mae_p50": 13.31,
+      "pinball_50": 6.66,
+      "pinball_90": 4.38,
+      "coverage_90": 92.7,
+      "mae_relatif_pct": 21.2
+    },
+    {
+      "mitra_kurir": "K12",
+      "n": 2808.0,
+      "median_aktual": 62.5,
+      "mae_p50": 13.29,
+      "pinball_50": 6.64,
+      "pinball_90": 4.21,
+      "coverage_90": 91.4,
+      "mae_relatif_pct": 21.3
+    },
+    {
+      "mitra_kurir": "K05",
+      "n": 6197.0,
+      "median_aktual": 62.9,
+      "mae_p50": 12.85,
+      "pinball_50": 6.42,
+      "pinball_90": 4.09,
+      "coverage_90": 92.5,
+      "mae_relatif_pct": 20.4
+    },
+    {
+      "mitra_kurir": "K11",
+      "n": 3392.0,
+      "median_aktual": 60.8,
+      "mae_p50": 12.72,
+      "pinball_50": 6.36,
+      "pinball_90": 4.02,
+      "coverage_90": 92.0,
+      "mae_relatif_pct": 20.9
+    },
+    {
+      "mitra_kurir": "K04",
+      "n": 6777.0,
+      "median_aktual": 59.7,
+      "mae_p50": 12.56,
+      "pinball_50": 6.28,
+      "pinball_90": 4.18,
+      "coverage_90": 92.6,
+      "mae_relatif_pct": 21.0
+    },
+    {
+      "mitra_kurir": "K09",
+      "n": 4072.0,
+      "median_aktual": 58.6,
+      "mae_p50": 12.4,
+      "pinball_50": 6.2,
+      "pinball_90": 4.2,
+      "coverage_90": 91.8,
+      "mae_relatif_pct": 21.2
+    },
+    {
+      "mitra_kurir": "K01",
+      "n": 9621.0,
+      "median_aktual": 57.7,
+      "mae_p50": 12.15,
+      "pinball_50": 6.07,
+      "pinball_90": 3.96,
+      "coverage_90": 92.3,
+      "mae_relatif_pct": 21.1
+    },
+    {
+      "mitra_kurir": "K08",
+      "n": 4777.0,
+      "median_aktual": 52.3,
+      "mae_p50": 11.33,
+      "pinball_50": 5.66,
+      "pinball_90": 3.81,
+      "coverage_90": 93.8,
+      "mae_relatif_pct": 21.7
+    }
+  ],
+  "shap_top": [
+    {
+      "fitur": "layanan",
+      "mean_abs_shap_jam": 11.462
+    },
+    {
+      "fitur": "jarak_km",
+      "mean_abs_shap_jam": 9.815
+    },
+    {
+      "fitur": "kota_tujuan",
+      "mean_abs_shap_jam": 5.022
+    },
+    {
+      "fitur": "f04",
+      "mean_abs_shap_jam": 4.15
+    },
+    {
+      "fitur": "f17",
+      "mean_abs_shap_jam": 4.14
+    },
+    {
+      "fitur": "mitra_kurir",
+      "mean_abs_shap_jam": 2.798
+    },
+    {
+      "fitur": "antrean_hub_asal",
+      "mean_abs_shap_jam": 2.647
+    },
+    {
+      "fitur": "cod",
+      "mean_abs_shap_jam": 1.899
+    },
+    {
+      "fitur": "pulau_tujuan",
+      "mean_abs_shap_jam": 1.805
+    },
+    {
+      "fitur": "kota_asal",
+      "mean_abs_shap_jam": 1.518
+    },
+    {
+      "fitur": "pengalaman_kurir_bulan",
+      "mean_abs_shap_jam": 1.288
+    },
+    {
+      "fitur": "hub_asal",
+      "mean_abs_shap_jam": 1.003
+    }
+  ],
+  "pdp": {
+    "jarak_km": {
+      "grid": [
+        60.1,
+        159.1,
+        235.223,
+        297.2,
+        435.785,
+        595.2,
+        682.595,
+        741.6,
+        821.3,
+        947.555,
+        1100.3,
+        1444.195,
+        1736.603,
+        2212.019,
+        3434.7
+      ],
+      "p50": [
+        48.88,
+        50.04,
+        51.55,
+        52.92,
+        58.34,
+        64.66,
+        66.91,
+        69.18,
+        70.32,
+        72.11,
+        72.78,
+        72.57,
+        73.08,
+        75.16,
+        88.38
+      ]
+    },
+    "antrean_hub_asal": {
+      "grid": [
+        37.98,
+        169.0,
+        309.0,
+        471.203,
+        636.0,
+        773.703,
+        981.0,
+        1231.5,
+        1607.723,
+        2011.297,
+        2430.723,
+        2981.391,
+        4726.843,
+        11612.231,
+        39097.12
+      ],
+      "p50": [
+        64.98,
+        65.0,
+        65.05,
+        65.08,
+        65.11,
+        65.2,
+        65.34,
+        65.57,
+        65.86,
+        66.23,
+        67.04,
+        67.68,
+        70.41,
+        75.43,
+        78.59
+      ]
+    },
+    "alamat_skor": {
+      "grid": [
+        0.417,
+        0.565,
+        0.633,
+        0.692,
+        0.736,
+        0.768,
+        0.796,
+        0.821,
+        0.84,
+        0.862,
+        0.886,
+        0.909,
+        0.931,
+        0.953,
+        0.982
+      ],
+      "p50": [
+        69.64,
+        68.76,
+        67.97,
+        67.59,
+        67.37,
+        67.27,
+        67.19,
+        67.12,
+        67.07,
+        66.88,
+        66.85,
+        66.82,
+        66.81,
+        66.8,
+        66.77
+      ]
+    },
+    "layanan": {
+      "ekspres": 41.64,
+      "hemat": 80.9,
+      "kargo": 83.47,
+      "reguler": 63.2
+    }
+  },
+  "final": {
+    "n": 60000,
+    "p50_median": 63.25,
+    "p90_median": 87.31,
+    "n_k13": 2342,
+    "p50_median_k13": 67.17
+  },
+  "library": {
+    "lightgbm": "4.7.0",
+    "pandas": "3.0.5",
+    "numpy": "2.5.3",
+    "sklearn": "1.9.1",
+    "seed": 42
+  },
+  "durasi_detik": 789.2
+}

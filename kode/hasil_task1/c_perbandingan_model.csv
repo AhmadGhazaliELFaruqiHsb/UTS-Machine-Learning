@@ -1,0 +1,4 @@
+model,mae_p50,pinball_50,pinball_90,coverage_90
+Baseline: kuantil empiris per layanan x pulau,20.974,10.487,6.458,88.91
+Lanjutan 1: Ridge target log + kuantil residual,15.372,7.686,4.728,89.72
+Lanjutan 2: LightGBM quantile (tuned),13.773,6.886,4.471,86.42

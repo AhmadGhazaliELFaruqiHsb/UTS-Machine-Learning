@@ -1,0 +1,4 @@
+set_fitur,n_fitur,silhouette,stabilitas_ari
+Semua kolom (domain + noise n01-n15),60,0.0409,0.845
+Domain tanpa noise (belum diseleksi),45,0.0566,0.822
+Fitur terpilih (dipakai),31,0.0672,0.961
