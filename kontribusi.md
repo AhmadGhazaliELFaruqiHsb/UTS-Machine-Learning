@@ -27,6 +27,7 @@
   - Menemukan bahwa `n01`–`n15` adalah noise dan mengeluarkannya.
   - Isolation Forest untuk label anomali `-1` dan K-Means sebagai metode utama, beserta profil persona segmen.
 - Meminta perbaikan Task 1 & Task 3 agar seluruh angka laporan dihasilkan oleh kode (dikerjakan pada PR Ahmad, lihat bagian B).
+-  **Pull request**: [daftar PR Frans ke repo kelompok](https://github.com/Frans1828/UTS-Machine-Learning/pulls?q=is%3Apr+author%3AFrans1828)
 
 ### B. Ahmad Ghazali El-Faruqi HSB (NIM: 101032330080)
 - **Task 2 – Classification (Fraud Detection)**:
@@ -74,3 +75,5 @@ Sesuai dengan ketentuan ujian: *"AI tools: allowed. State the tool, the parts it
 Dokumen ini disusun dan disetujui bersama oleh seluruh anggota Kelompok 16:
 - (Ttd) **Fransisco Sitepu** (101032300004)
 - (Ttd) **Ahmad Ghazali El-Faruqi HSB** (101032330080)
+
+Persetujuan dicatat melalui pull request masing-masing anggota di GitHub. Isi pernyataan penggunaan AI di bagian 3 sudah dibaca dan disetujui oleh kedua anggota.
